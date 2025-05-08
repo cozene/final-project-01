@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Carousel</title>
+    <style>
+/* Centered Navbar Styles */
+/* Navbar Styles */
+body{
+    background: linear-gradient(45deg, #00f3ff, #040008);
+}
+        .main-nav {
+  background: transparent;
+  backdrop-filter: blur(10px);
+  padding: 3rem 5%; /* Reduced vertical padding */
+  display: flex;
+  justify-content: center; /* Center content */
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+}
+
+.logo img {
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: #f8f8f8;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background: #00f3ff;
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-links a.active {
+  color: #00f3ff;
+}
+
+/* Burger Menu */
+.burger {
+  display: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.burger div {
+  width: 25px;
+  height: 3px;
+  background: #cbd0eb;
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .nav-links {
+      position: fixed;
+      right: -100%;
+      top: 70px;
+      height: calc(100vh - 70px);
+      background: rgba(4, 0, 8, 0.98);
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      width: 100%;
+      transition: right 0.5s ease;
+  }
+
+  .nav-links.active {
+      right: 0;
+  }
+
+  .burger {
+      display: block;
+  }
+}
+
+/* Burger Animation */
+.toggle .line1 {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+.toggle .line2 {
+  opacity: 0;
+}
+.toggle .line3 {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+  /* Optional overlay for better text readability */
+  #home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Adjust overlay opacity as needed */
+}
+
+        /* Original Banner Styles */
+        @import url('https://fonts.cdnfonts.com/css/ica-rubrik-blacks');
+        
+        .banner {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'ICA Rubrik Blacks', sans-serif;
+            background: rgba(0, 0, 5, 0.2);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 80px rgba(0, 0, 1, 0.4);
+        }
+        .banner .slider {
+            position: relative;
+            width: 200px;
+            height: 250px;
+            transform-style: preserve-3d;
+            --quantity: 5; /* Updated to match number of items */
+            animation: autoRun 20s linear infinite;
+            transform: perspective(1200px) rotateX(0deg); /* Improved perspective */
+            z-index: 2;
+        }
+
+       
+        @keyframes autoRun {
+            from {
+                transform: perspective(1200px) rotateY(0deg);
+            }
+            to {
+                transform: perspective(1200px) rotateY(360deg);
+            }
+        }
+
+        .banner .slider .item {
+            position: absolute;
+            inset: 0;
+            transform: 
+                rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg))
+                translateZ(300px); /* Reduced translateZ for tighter circle */
+            transform-style: preserve-3d;
+        }
+        .banner .slider .item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .banner .content {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(1400px, 100vw);
+            height: max-content;
+            padding-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'ICA Rubrik Blacks', sans-serif;
+            z-index: 1;
+            padding-bottom: 50px;
+        }
+
+       
+  .banner .content h1 {
+      font-family: ICA Rubrik;
+      font-size: 8rem; /* Reduced from 16rem */
+      line-height: 1rem;
+      color: #cbd0eb;
+      position: relative;
+  }
+
+        .banner .content h1::after {
+            position: absolute;
+            inset:0 0 0 0;
+            content: attr(data-content);
+            z-index: 2;
+            -webkit-text-stroke: 2px #d2d2d2;
+            color: transparent;
+        }
+
+        .banner .content .author {
+            font-family: Poppins;
+            text-align: right;
+            max-width: 200px;
+            margin-top: -30px; /* Pulls the author section up */
+    position: relative;
+    z-index: 3;
+        }
+
+        .banner .content h2 {
+            font-size: 3rem;
+        }
+
+        .banner .content .model {
+            background-image: url(assets/OIP1-removebg-preview.png);
+            width: 100%;
+            height: 75vh;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-size: auto 130%;
+            background-repeat: no-repeat;
+            background-position: top center;
+            z-index: 1;
+        }
+            /* CSS imports first */
+            @import url('https://fonts.cdnfonts.com/css/ica-rubrik-blacks');
+        
+        /* Navbar Fixes */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(45deg, #00f3ff, #040008);
+            z-index: 1000;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: flex-end;
+            gap: 30px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #d3d3d7;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .burger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #25283B;
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+
+        /* Active burger state */
+        .burger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .burger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Original Banner Styles (unchanged) */
+
+        /* Footer Fixes */
+        .footer {
+            background: linear-gradient(45deg, #00f3ff, #040008);
+            color: #fff;
+            padding: 50px 20px;
+            margin-top: auto;
+            padding: 20px 20px 30px; 
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            color: #d2d2d2;
+            margin-bottom: 20px;
+        }
+
+        .footer-links, .social-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li, .social-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a, .social-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover, .social-links a:hover {
+            color: #d2d2d2;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .newsletter-form button {
+            background: #d2d2d2;
+            color: #25283B;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.9);
+                padding: 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar Component -->
+    <div id="navbar-root">
+        <nav class="main-nav">
+            <a href="index.html" class="logo">
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="challenge.html">Challenges</a></li>
+                <li><a href="solution.html">Solutions</a></li>
+                <li><a href="contactus.html">Contact</a></li>
+            </ul>
+        
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+           </div>
+    <!-- Banner -->
+    <div class="banner">
+        <div class="slider">
+            <!-- Image items -->
+            <div class="item" style="--position: 1"><img src="assets\OIP02.avif"></div>
+            <div class="item" style="--position: 2"><img src="assets\photo-1587320122541-ce3e46f6fe60.avif"></div>
+            <div class="item" style="--position: 3"><img src="assets\cosmos.avif"></div>
+            <div class="item" style="--position: 4"><img src="assets\rover.avif"></div>
+            <div class="item" style="--position: 5"><img src="assets\traffic.jpeg"></div>
+        </div>
+        <div class="content">
+            <div class="wrapper">
+                <h2>Evolution</h2>
+                <p><b>The Unfolding</b></p>
+                <p>
+                    "Space innovation<br>  evolves through <br> revolutionary advancements<br> in propulsion and <br> habitation technologies<br>, while cosmic<br>  traffic management<br> adapts with<br>  AI-driven<br>  orbital coordination<br> systems, creating <br> a symbiotic <br>evolution of<br>  exploration capabilities <br>and interstellar<br>  stewardship." 
+                </p>
+            </div>
+            <div class="author">
+                <h2>OVER<br>HAULED</h2>
+                <p><b>Paradigm shifts</b></p>
+                <p>
+                    Propulsion/Habitats: Radical reinvention (not incremental improvement)
+
+                    AI Management: Autonomous systems replacing legacy protocols
+                    
+                    Impact: Discontinuous leap in capability, not gradual "boosting"
+                    
+                    Stewardship → Governance: Implies systemic restructuring, not just "responsibility"
+            </div>
+            <div class="model"></div>
+        </div>
+    </div>
+        <!-- footer -->
+
+        <footer class="footer">
+            <div class="footer-container">
+                <!-- Quick Links -->
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#About">About</a></li>
+                        <li><a href="#problems">problems</a></li>
+                        <li><a href="#solution">solution</a></li>
+                        <li><a href="#Contact">Contact</a></li>
+                        <li><a href="#Privacy Policy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Social Media Links -->
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <ul class="social-links">
+                        <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                    </ul>
+                </div>
+    
+                <!-- Newsletter -->
+                <div class="footer-section">
+                    <h3>Newsletter</h3>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Enter your email" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+    
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <p>&copy; 2023 Your Company. All rights reserved.</p>
+            </div>
+        </footer>
+        <script src="about.js">// Navbar Toggle Script
+            document.addEventListener('DOMContentLoaded', () => {
+                const burger = document.querySelector('.burger');
+                const navLinks = document.querySelector('.nav-links');
+            
+                burger.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                    burger.classList.toggle('toggle');
+                });
+            
+                // Close menu when clicking outside on mobile
+                document.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768 && 
+                        !e.target.closest('.nav-links') && 
+                        !e.target.closest('.burger')) {
+                        navLinks.classList.remove('active');
+                        burger.classList.remove('toggle');
+                    }
+                });
+            });</script>
+</body>
+</html>

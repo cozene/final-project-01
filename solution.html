@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Innovation Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .main-nav {
+  background: transparent;
+  backdrop-filter: blur(10px);
+  padding: 0rem 5%; /* Reduced vertical padding */
+  display: flex;
+  justify-content: center; /* Center content */
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+}
+.nav-links {
+  display: flex;
+  gap: 1.5rem; /* Increased gap between links */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: #cbd0eb;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background: #00f3ff;
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-links a.active {
+  color: #00f3ff;
+}
+
+/* Burger Menu */
+.burger {
+  display: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.burger div {
+  width: 25px;
+  height: 3px;
+  background: #cbd0eb;
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .nav-links {
+      position: fixed;
+      right: -100%;
+      top: 70px;
+      height: calc(100vh - 70px);
+      background: rgba(4, 0, 8, 0.98);
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      width: 100%;
+      transition: right 0.5s ease;
+  }
+
+  .nav-links.active {
+      right: 0;
+  }
+
+  .burger {
+      display: block;
+  }
+}
+
+/* Burger Animation */
+.toggle .line1 {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+.toggle .line2 {
+  opacity: 0;
+}
+.toggle .line3 {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+  /* Optional overlay for better text readability */
+  #home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Adjust overlay opacity as needed */
+}
+
+        .space-section {
+            min-height: 100vh;
+            background: var(--space-black);
+            padding: var(--section-spacing) 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+           /* Fixed duplicate CSS rules */
+           .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .content {
+            color: #fff;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #00f3ff, #8a2be2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .section-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #ccd6f6;
+            margin-bottom: 2rem;
+        }
+
+        .innovation-cards {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .card {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            color: #00f3ff;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .card-text {
+            color: #ccd6f6;
+            font-size: 0.95rem;
+        }
+
+        .space-visual {
+            position: relative;
+            height: 500px;
+        }
+
+        /* Animated Elements */
+        .floating-earth {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle at 30% 30%, #1a237e, #000);
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .satellite {
+            position: absolute;
+            width: 50px;
+            height: 20px;
+            background: #fff;
+            clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
+            animation: orbit 15s linear infinite;
+        }
+
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* Removed duplicate .star declaration */
+        .star {
+            position: absolute;
+            background: var(--star-glow);
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+    
+        /* Fixed animation keyframes duplication */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(200px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(200px) rotate(-360deg); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 2.5rem !important;
+            }
+            
+            .space-visual {
+                height: 300px;
+            }
+            
+            .floating-earth {
+                width: 300px !important;
+                height: 300px !important;
+            }
+        }
+
+/* Consolidated CSS Variables */
+:root {
+    background: linear-gradient(45deg, #00f3ff, #040008);
+            --star-glow: rgba(255, 255, 255, 0.8);
+            --section-spacing: 4rem;
+        }
+   
+        body {
+            background: linear-gradient(45deg, #00f3ff, #040008);
+            color: white;
+            line-height: 1.6;
+        }
+
+
+    .operations-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .section-heading {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .section-heading h1 {
+        font-size: 2.5rem;
+        background: linear-gradient(45deg, var(--neon-blue), #8a2be2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1rem;
+    }
+
+    .operation-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: var(--section-spacing);
+    }
+
+    .system-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        transition: transform 0.3s ease;
+    }
+
+    .system-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .system-card h1 {
+        font-size: 1.5rem;
+        color: var(--neon-blue);
+        margin-bottom: 1rem;
+        border-left: 3px solid var(--neon-blue);
+        padding-left: 1rem;
+    }
+
+    .point {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+        color: #ccd6f6;
+    }
+
+    .point::before {
+        content: "▹";
+        position: absolute;
+        left: 0;
+        color: var(--neon-blue);
+    }
+
+    /* Animated Background Elements */
+    .space-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .star {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle var(--duration) infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+        .operations-container {
+            padding: 1rem;
+        }
+        
+        .section-heading h1 {
+            font-size: 2rem;
+        }
+        
+        .system-card {
+            padding: 1.5rem;
+        }
+    }
+     /* Footer Styles */
+  .footer {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+  .footer {
+    background: linear-gradient(45deg, #00f3ff, #040008);
+            padding: 4rem 2rem;
+            margin-top: 4rem;
+            border-top: 2px solid #7fffd433;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            padding: 0 2rem; /* Add container padding instead */
+        }
+
+        .footer-section h3 {
+            color: #7fffd4;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #7fffd4;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #7fffd4;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #7fffd433;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-radius: 4px;
+        }
+
+        .newsletter-form button {
+            background: #7fffd4;
+            color: #0f0f2e;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            opacity: 0.9;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #7fffd433;
+            color: #7fffd4;
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+      <!-- Navbar Component -->
+      <div id="navbar-root">
+        <nav class="main-nav">
+            <a href="index.html" class="logo">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="challenge.html">Challenges</a></li>
+                <li><a href="solution.html">Solutions</a></li>
+                <li><a href="contactus.html">Contact</a></li>
+            </ul>
+        
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+           </div>
+
+    <section class="space-section">
+        <div class="stars">
+            <!-- Add star elements with JavaScript or manually -->
+        </div>
+        
+        <div class="container">
+            <div class="content-wrapper">
+                <div class="content">
+                    <h1 class="section-title">Next-Gen Space Management Solutions</h1>
+                    <p class="section-text">
+                        Revolutionizing space operations with AI-driven analytics, orbital optimization, 
+                        and sustainable resource management for the new space economy.
+                    </p>
+                    <div class="innovation-cards">
+                        <div class="card">
+                            <h3 class="card-title">Orbital Analytics</h3>
+                            <p class="card-text">Real-time tracking and predictive collision avoidance systems</p>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">Debris Mitigation</h3>
+                            <p class="card-text">Advanced solutions for space junk monitoring and removal</p>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">Resource Allocation</h3>
+                            <p class="card-text">Smart distribution of orbital slots and frequency spectrum</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-visual">
+                    <div class="floating-earth"></div>
+                    <div class="satellite"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="operations-container">
+        <div class="section-heading">
+            <h1>Space Operations Management Solutions</h1>
+        </div>
+    
+        <div class="operation-section">
+            <!-- Mission Control System -->
+            <div class="system-card">
+                <h1>🛰️ Mission Control System</h1>
+                <div class="point">Advanced AI-driven autonomous systems for real-time decision making</div>
+                <div class="point">Radiation-hardened components with multi-layer shielding</div>
+                <div class="point">Self-healing systems architecture with redundant backups</div>
+                <div class="point">Closed-loop life support systems with AI monitoring</div>
+                <div class="point">Modular design for in-orbit maintenance/upgrades</div>
+            </div>
+    
+            <!-- Satellite Network -->
+            <div class="system-card">
+                <h1>🌐 Satellite Network</h1>
+                <div class="point">AI-powered collision avoidance system</div>
+                <div class="point">Quantum encryption for secure communications</div>
+                <div class="point">Dynamic spectrum sharing technology</div>
+                <div class="point">Autonomous orbital debris removal systems</div>
+            </div>
+    
+            <!-- Deep Space Comms -->
+            <div class="system-card">
+                <h1>📡 Deep Space Comms</h1>
+                <div class="point">Laser communication systems for high-bandwidth</div>
+                <div class="point">Quantum entanglement-based messaging</div>
+                <div class="point">AI-powered signal optimization algorithms</div>
+                <div class="point">Radiation-hardened receivers</div>
+            </div>
+    
+            <!-- Rover Operations -->
+            <div class="system-card">
+                <h1>🤖 Rover Operations</h1>
+                <div class="point">AI-powered autonomous navigation</div>
+                <div class="point">Self-healing suspension systems</div>
+                <div class="point">Nuclear-powered energy systems</div>
+                <div class="point">Swarm robotics coordination</div>
+            </div>
+    
+            <!-- Space Traffic Control -->
+            <div class="system-card">
+                <h1>🚀 Space Traffic Control</h1>
+                <div class="point">Blockchain-based orbital slot registry</div>
+                <div class="point">Global tracking network with AI prediction</div>
+                <div class="point">Standardized international protocols</div>
+                <div class="point">Automated debris removal initiatives</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="space-bg">
+        <!-- JavaScript would dynamically add stars here -->
+    </div>
+
+   <!-- Added star elements -->
+   <div class="space-bg">
+    <div class="star" style="top: 15%; left: 20%; width: 2px; height: 2px;"></div>
+    <div class="star" style="top: 25%; left: 70%; width: 3px; height: 3px;"></div>
+    <div class="star" style="top: 40%; left: 50%; width: 2px; height: 2px;"></div>
+    <!-- Add more stars as needed -->
+</div>
+
+    <!-- footer -->
+
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Quick Links -->
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#About">About</a></li>
+                    <li><a href="#problems">problems</a></li>
+                    <li><a href="#solution">solution</a></li>
+                    <li><a href="#Contact">Contact</a></li>
+                    <li><a href="#Privacy Policy">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <!-- Social Media Links -->
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <ul class="social-links">
+                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                    <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="footer-section">
+                <h3>Newsletter</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="footer-bottom">
+            <p>&copy; 2023 Your Company. All rights reserved.</p>
+        </div>
+    </footer>
+
+<script>
+    function createStars() {
+        const container = document.querySelector('.space-bg');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDuration = Math.random() * 3 + 2 + 's';
+            container.appendChild(star);
+        }
+    }
+    createStars();
+</script>
+
+</body>
+</html>

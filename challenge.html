@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Systems Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .main-nav {
+  background: transparent;
+  backdrop-filter: blur(10px);
+  padding: 0rem 5%; /* Reduced vertical padding */
+  display: flex;
+  justify-content: center; /* Center content */
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+}
+.nav-links {
+  display: flex;
+  gap: 1.5rem; /* Increased gap between links */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: #cbd0eb;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background: #00f3ff;
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-links a.active {
+  color: #00f3ff;
+}
+
+/* Burger Menu */
+.burger {
+  display: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.burger div {
+  width: 25px;
+  height: 3px;
+  background: #cbd0eb;
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .nav-links {
+      position: fixed;
+      right: -100%;
+      top: 70px;
+      height: calc(100vh - 70px);
+      background: rgba(4, 0, 8, 0.98);
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      width: 100%;
+      transition: right 0.5s ease;
+  }
+
+  .nav-links.active {
+      right: 0;
+  }
+
+  .burger {
+      display: block;
+  }
+}
+
+/* Burger Animation */
+.toggle .line1 {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+.toggle .line2 {
+  opacity: 0;
+}
+.toggle .line3 {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+  /* Optional overlay for better text readability */
+  #home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Adjust overlay opacity as needed */
+}
+
+        body {
+            background: linear-gradient(45deg, #00f3ff, #040008);
+            color: #7ddcff;
+            min-height: 100vh;
+            padding: 2rem;
+            overflow-x: hidden; 
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .challenge-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            position: relative;
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .category {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #7fffd4;
+        }
+
+        .desc {
+            color: #aaa;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .stats {
+            display: flex;
+            gap: 1rem;
+            color: #7fffd4;
+            font-size: 0.9rem;
+        }
+
+        .stats span {
+            display: flex;
+            align-items: center;
+        }
+
+        .stats span:not(:last-child)::after {
+            content: "|";
+            margin-left: 1rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #7fffd4, transparent);
+            margin: 1.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .challenge-card {
+                padding: 1.5rem;
+            }
+        }
+
+/* Base Styles */
+.heading {
+        text-align: center;
+        margin: 3rem 0;
+    }
+
+    .heading h1 {
+        font-size: 2.5rem;
+        color: #7fffd4;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 1rem;
+    }
+
+    /* Section Styling */
+    section {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 2rem auto;
+        max-width: 800px;
+        border: 1px solid rgba(127, 255, 212, 0.1);
+    }
+
+    section h1 {
+        color: #7fffd4;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid #7fffd433;
+        padding-bottom: 0.5rem;
+    }
+
+    /* Numbered Points */
+    section h3 {
+        color: #cccccc;
+        font-weight: 300;
+        line-height: 1.7;
+        counter-reset: point-counter;
+        padding-left: 2rem;
+    }
+
+    section h3 br {
+        display: none; /* Hide original line breaks */
+    }
+
+    section h3::before {
+        content: counter(point-counter) ". ";
+        counter-increment: point-counter;
+        color: #7fffd4;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+    }
+
+    .point {
+        position: relative;
+        margin-bottom: 1rem;
+        padding-left: 2rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .heading h1 {
+            font-size: 2rem;
+        }
+
+        section {
+            padding: 1.5rem;
+            margin: 1.5rem;
+        }
+
+        section h1 {
+            font-size: 1.4rem;
+        }
+
+        section h3 {
+            font-size: 0.95rem;
+            padding-left: 1.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .heading h1 {
+            font-size: 1.6rem;
+        }
+
+        section {
+            margin: 1rem;
+            padding: 1rem;
+        }
+
+        section h3 {
+            padding-left: 1.2rem;
+        }
+
+        .point {
+            padding-left: 1.5rem;
+        }
+    }
+  /* Footer Styles */
+  .footer {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+  .footer {
+    background: linear-gradient(45deg, #00f3ff, #040008);
+            padding: 4rem 2rem;
+            margin-top: 4rem;
+            border-top: 2px solid #7fffd433;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            padding: 0 2rem; /* Add container padding instead */
+        }
+
+        .footer-section h3 {
+            color: #7fffd4;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #7fffd4;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #7fffd4;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #7fffd433;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-radius: 4px;
+        }
+
+        .newsletter-form button {
+            background: #7fffd4;
+            color: #0f0f2e;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            opacity: 0.9;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #7fffd433;
+            color: #7fffd4;
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar Component -->
+    <div id="navbar-root">
+        <nav class="main-nav">
+            <a href="index.html" class="logo">
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="challenge.html">Challenges</a></li>
+                <li><a href="solution.html">Solutions</a></li>
+                <li><a href="contactus.html">Contact</a></li>
+            </ul>
+        
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+           </div>
+
+    <div class="container">
+        <h1>Space Operations challenge</h1>
+        <div class="challenges-grid">
+            <!-- Mission Control System -->
+            <div class="challenge-card">
+                <div class="category">SPACESTATION</div>
+                <h2>Mission Control System</h2>
+                <div class="line"></div>
+                <p class="desc">Advanced orbital management interface</p>
+                <div class="stats">
+                    <span>98% Efficiency</span>
+                    <span>24/7 Monitoring</span>
+                </div>
+            </div>
+
+            <!-- Satellite Network -->
+            <div class="challenge-card">
+                <div class="category">SATELLITE</div>
+                <h2>Satellite Network</h2>
+                <div class="line"></div>
+                <p class="desc">Global coverage constellation management</p>
+                <div class="stats">
+                    <span>5,000+ Units</span>
+                    <span>Low Earth Orbit</span>
+                </div>
+            </div>
+
+            <!-- Deep Space Comms -->
+            <div class="challenge-card">
+                <div class="category">SPACE</div>
+                <h2>Deep Space Comms</h2>
+                <div class="line"></div>
+                <p class="desc">Quantum entanglement communication system</p>
+                <div class="stats">
+                    <span>0ms Latency</span>
+                    <span>Secure Channels</span>
+                </div>
+            </div>
+
+            <!-- Rover Operations -->
+            <div class="challenge-card">
+                <div class="category">MARS</div>
+                <h2>Rover Operations</h2>
+                <div class="line"></div>
+                <p class="desc">Multi-planetary exploration management</p>
+                <div class="stats">
+                    <span>10 Active Missions</span>
+                    <span>AI-Powered</span>
+                </div>
+            </div>
+
+            <!-- Space Traffic Control -->
+            <div class="challenge-card">
+                <div class="category">GALAXY</div>
+                <h2>Space Traffic Control</h2>
+                <div class="line"></div>
+                <p class="desc">Orbital debris mitigation system</p>
+                <div class="stats">
+                    <span>1M+ Tracked Objects</span>
+                    <span>Collision Avoidance</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="heading">
+        <h1>Space Operations Explanation</h1>
+    </div>
+    
+    <section class="SMY">
+        <div class="heading">
+            <h1>Mission Control System</h1>
+            <h3>
+                <div class="point">Harsh Environment: Extreme temperatures, radiation, and vacuum demand robust materials and shielding.</div>
+                <div class="point">Communication Delays: Vast distances cause lag, requiring autonomous systems for real-time decisions.</div>
+                <div class="point">Propulsion Limits: Fuel efficiency and energy constraints hinder speed, range, and mission duration.</div>
+                <div class="point">Reliability: Zero room for error; systems must function flawlessly for years without repairs.</div>
+                <div class="point">Human Survival: Life support, radiation protection, and psychological strain complicate crewed missions.</div>
+                <div class="point">Cost: High expenses for R&D, testing, and launch limit scope and frequency.</div>
+            </h3>
+        </div>
+    </section>
+    
+    <section class="SN">
+        <div class="heading">
+            <h1>Satellite Network</h1>
+            <h3>
+                <div class="point">Orbital Congestion: Limited "slots" in popular orbits raise collision risks and regulatory conflicts.</div>
+                <div class="point">Signal Latency: Distance delays complicate real-time communication for critical applications.</div>
+                <div class="point">Interference: Overlapping frequencies degrade data transmission reliability.</div>
+                <div class="point">Cybersecurity: Vulnerable to hacking, jamming, or spoofing of critical signals.</div>
+            </h3>
+        </div>
+    </section>
+    
+    <section class="DSC">
+        <div class="heading">
+            <h1>Deep Space Comms</h1>
+            <h3>
+                <div class="point">Vast Distances: Signals weaken over billions of miles requiring ultra-sensitive receivers.</div>
+                <div class="point">Extreme Latency: Delays of hours to days rule out real-time control.</div>
+                <div class="point">Low Data Rates: Weak signals limit bandwidth for high-resolution images.</div>
+                <div class="point">Power Constraints: Balancing energy between communication and other systems.</div>
+                <div class="point">Cosmic Interference: Radiation and solar flares disrupt signal clarity.</div>
+            </h3>
+        </div>
+    </section>
+    
+    <section class="RO">
+        <div class="heading">
+            <h1>Rover Operation</h1>
+            <h3>
+                <div class="point">Harsh Terrain: Navigating rocks and slopes risks wheel damage and entrapment.</div>
+                <div class="point">Communication Delays: Requires autonomous decision-making due to lag.</div>
+                <div class="point">Power Management: Solar panels face dust accumulation and low light.</div>
+                <div class="point">Environmental Extremes: Surviving Mars' temperature swings (-100°C to 20°C).</div>
+                <div class="point">Mechanical Wear: Degrading components limit mobility and mission lifespan.</div>
+            </h3>
+        </div>
+    </section>
+    
+    <section class="STP">
+        <div class="heading">
+            <h1>Space Traffic Control</h1>
+            <h3>
+                <div class="point">Tracking & Monitoring: Millions of debris fragments overwhelm tracking systems.</div>
+                <div class="point">Orbital Congestion: Crowded orbits increase collision risks from mega-constellations.</div>
+                <div class="point">International Coordination: Lack of unified rules complicates global management.</div>
+            </h3>
+        </div>
+    </section>
+    <!-- footer -->
+
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Quick Links -->
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#About">About</a></li>
+                    <li><a href="#problems">problems</a></li>
+                    <li><a href="#solution">solution</a></li>
+                    <li><a href="#Contact">Contact</a></li>
+                    <li><a href="#Privacy Policy">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <!-- Social Media Links -->
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <ul class="social-links">
+                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                    <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="footer-section">
+                <h3>Newsletter</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="footer-bottom">
+            <p>&copy; 2023 Your Company. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
